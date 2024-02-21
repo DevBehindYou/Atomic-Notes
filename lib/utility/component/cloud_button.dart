@@ -32,15 +32,7 @@ class _CloudButtonState extends State<CloudButton> {
         width: 80,
         decoration: BoxDecoration(
           color: Color(widget.clr),
-          borderRadius: BorderRadius.circular(25),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.shade900,
-              offset: const Offset(2, 2),
-              blurRadius: 2,
-              spreadRadius: 1,
-            )
-          ],
+          borderRadius: BorderRadius.circular(20),
         ),
         child: widget.isLoading
             ? const Center(child: circularProgress())

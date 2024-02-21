@@ -10,10 +10,12 @@ class NotesCreaterPage extends StatelessWidget {
   VoidCallback onCopy;
   VoidCallback onSave;
   VoidCallback onCancel;
+  var createdAt;
 
   NotesCreaterPage({
     required this.tittleContoller,
     required this.notesController,
+    required this.createdAt,
     required this.onCopy,
     required this.onSave,
     required this.onCancel,
@@ -30,12 +32,24 @@ class NotesCreaterPage extends StatelessWidget {
           children: [
             Container(
               margin: const EdgeInsets.all(16.0),
-              padding: const EdgeInsets.all(25.0),
+              padding: const EdgeInsets.all(20.0),
               decoration: BoxDecoration(
                   color: const Color(0xff29283A),
                   borderRadius: BorderRadius.circular(10)),
               child: Column(
                 children: [
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 30, vertical: 1),
+                    decoration: BoxDecoration(
+                      color: const Color(0xff3f3e3c),
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: Text(
+                      "Created on: $createdAt",
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
                   // tittle textfield section
                   TextField(
                     controller: tittleContoller,
@@ -103,7 +117,7 @@ class NotesCreaterPage extends StatelessWidget {
                         ],
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),

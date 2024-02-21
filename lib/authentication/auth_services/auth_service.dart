@@ -14,7 +14,7 @@ class AuthServices {
     required String username,
   }) async {
     try {
-      await supabase.from('ensyncuser').upsert(
+      await supabase.from('atomicuser').upsert(
           {'username': username, 'user_id': userId},
           onConflict: "user_id");
       return "Username updated wait for refresh";
@@ -39,7 +39,7 @@ class AuthServices {
   Future<String> getUserInfo() async {
     try {
       final data = await supabase
-          .from('ensyncuser')
+          .from('atomicuser')
           .select('username')
           .eq('user_id', userId)
           .single();

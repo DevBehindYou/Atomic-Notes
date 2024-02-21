@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Intro3 extends StatelessWidget {
-  const Intro3({super.key});
+class Intro4 extends StatelessWidget {
+  const Intro4({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class Intro3 extends StatelessWidget {
             height: 500,
             child: Padding(
               padding: const EdgeInsets.all(20.0),
-              child: Image.asset("assets/intro3.png"),
+              child: Image.asset("assets/intro4.png"),
             ),
           ),
         ],

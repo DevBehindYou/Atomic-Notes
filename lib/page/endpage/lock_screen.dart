@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, deprecated_member_use
 
+import 'package:atomic_notes/utility/component/logo_container_2.dart';
 import 'package:atomic_notes/utility/component/my_snackbar.dart';
 import 'package:atomic_notes/utility/component/progress_indicator.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,7 @@ class _LockScreenState extends State<LockScreen> {
           }),
         );
     super.initState();
+    autoAuth();
   }
 
   @override
@@ -37,6 +39,11 @@ class _LockScreenState extends State<LockScreen> {
     _mounted = false;
     _isLoading = false;
     super.dispose();
+  }
+
+  autoAuth() async {
+    await Future.delayed(const Duration(seconds: 1));
+    _auth();
   }
 
   Future<void> _auth() async {
@@ -47,7 +54,7 @@ class _LockScreenState extends State<LockScreen> {
     });
     try {
       bool authenticated = await auth.authenticate(
-          localizedReason: "Privacy for Ensync",
+          localizedReason: "Privacy for AtomicNotes",
           options: const AuthenticationOptions(
             stickyAuth: true,
             biometricOnly: false,
@@ -71,12 +78,13 @@ class _LockScreenState extends State<LockScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff323130),
+      backgroundColor: const Color(0xff29283A),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: 200),
+            const LogoContainer2(),
+            const SizedBox(height: 160),
             Center(
               child: GestureDetector(
                   onTap: _auth,

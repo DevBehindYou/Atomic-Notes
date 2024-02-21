@@ -22,24 +22,9 @@ class ProConatainer extends StatelessWidget {
           height: 180,
           width: 180,
           decoration: BoxDecoration(
-              color: const Color(0xff323130),
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                // top left shadow is darker
-                BoxShadow(
-                  color: Colors.grey.shade800,
-                  offset: const Offset(-2, -2),
-                  blurRadius: 2,
-                  spreadRadius: 1,
-                ),
-                // bottom right shadow is darker
-                BoxShadow(
-                  color: Colors.grey.shade900,
-                  offset: const Offset(3, 3),
-                  blurRadius: 5,
-                  spreadRadius: 4,
-                ),
-              ]),
+            color: const Color(0xff323130),
+            borderRadius: BorderRadius.circular(16),
+          ),
           child: Stack(
             children: [
               Padding(
@@ -72,6 +57,7 @@ class ProConatainer extends StatelessWidget {
         ),
         Column(
           children: [
+            const SizedBox(height: 10),
             GestureDetector(
               onTap: logout,
               child: Container(

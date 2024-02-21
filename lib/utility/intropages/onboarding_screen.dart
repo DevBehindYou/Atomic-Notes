@@ -1,5 +1,9 @@
+import 'package:atomic_notes/utility/intropages/introscreens/intro_page0.dart';
+import 'package:atomic_notes/utility/intropages/introscreens/intro_page1.dart';
 import 'package:atomic_notes/utility/intropages/introscreens/intro_page2.dart';
 import 'package:atomic_notes/utility/intropages/introscreens/intro_page3.dart';
+import 'package:atomic_notes/utility/intropages/introscreens/intro_page4.dart';
+import 'package:atomic_notes/utility/intropages/introscreens/intro_page5.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -25,12 +29,16 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             controller: _controller,
             onPageChanged: (value) {
               setState(() {
-                onLastPage = (value == 1);
+                onLastPage = (value == 5);
               });
             },
             children: const [
+              Intro0(),
+              Intro1(),
               Intro2(),
               Intro3(),
+              Intro4(),
+              Intro5(),
             ],
           ),
           Container(
@@ -53,7 +61,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 // skip button
                 GestureDetector(
                   onTap: () {
-                    _controller.jumpToPage(1);
+                    _controller.jumpToPage(5);
                   },
                   child: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 15),
@@ -73,7 +81,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 // dots
                 SmoothPageIndicator(
                   controller: _controller,
-                  count: 2,
+                  count: 6,
                 ),
 
                 // next or done

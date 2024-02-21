@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:io';
+
 import 'package:atomic_notes/database/sync_status.dart';
 import 'package:atomic_notes/utility/component/my_snackbar.dart';
 import 'package:atomic_notes/utility/component/my_appbar.dart';
@@ -69,11 +71,27 @@ class _CloudSyncPageState extends State<CloudSyncPage> {
                       text: "Cloud Synchronization On",
                       sec: 2000,
                     ).showMySnackBar(context);
+                    const MySnackBar(
+                      text: "Restarting the app in 5 sec...",
+                      sec: 2000,
+                    ).showMySnackBar(context);
+                    await Future.delayed(
+                      const Duration(seconds: 5),
+                    );
+                    exit(0);
                   } else {
                     const MySnackBar(
                       text: "Cloud Synchronization Off",
                       sec: 2000,
                     ).showMySnackBar(context);
+                    const MySnackBar(
+                      text: "Restarting the app in 5 sec...",
+                      sec: 2000,
+                    ).showMySnackBar(context);
+                    await Future.delayed(
+                      const Duration(seconds: 5),
+                    );
+                    exit(0);
                   }
                 },
               ),

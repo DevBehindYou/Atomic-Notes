@@ -25,14 +25,6 @@ class MyFloatingButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: Color(colorValue),
           borderRadius: BorderRadius.circular(25),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.shade900,
-              offset: const Offset(2, 2),
-              blurRadius: 2,
-              spreadRadius: 1,
-            )
-          ],
         ),
         child: SvgPicture.asset(
           ico,

@@ -17,8 +17,9 @@ class DatabasePage extends StatefulWidget {
 class _DatabasePageState extends State<DatabasePage> {
   final NotesDataBase db = NotesDataBase();
   int localNotesNum = 0;
-  String cloudNotesNum = '-';
+  String cloudNotes = '-';
   bool _mounted = true;
+  String synctime = '-';
 
   @override
   void initState() {
@@ -26,19 +27,11 @@ class _DatabasePageState extends State<DatabasePage> {
     super.initState();
   }
 
-  void _getDBLocalNum() {
-    db.loadLocalData();
-    if (_mounted) {
-      setState(() {
-        localNotesNum = db.notesList.length;
-      });
-    }
-  }
-
-  Future<void> _getDBCloudNum() async {
+  Future<void> _getData() async {
     if (!_mounted) return;
 
     final connectivityResult = await Connectivity().checkConnectivity();
+    if (!_mounted) return; // Check again before updating state
     setState(() {
       connectivityResult;
     });
@@ -49,11 +42,31 @@ class _DatabasePageState extends State<DatabasePage> {
       ).showMySnackBar(context);
     } else {
       String count = await db.countNotesNumFromCloud();
-      if (_mounted) {
+      String time = await db.checkModifyStatus();
+      if (!_mounted) return; // Check again before updating state
+      setState(() {
+        synctime = time;
+      });
+      if (count == '1') {
+        if (!_mounted) return; // Check again before updating state
         setState(() {
-          cloudNotesNum = count;
+          cloudNotes = 'Yes';
+        });
+      } else {
+        if (!_mounted) return; // Check again before updating state
+        setState(() {
+          cloudNotes = 'No';
         });
       }
+    }
+  }
+
+  void _getDBLocalNum() {
+    db.loadLocalData();
+    if (_mounted) {
+      setState(() {
+        localNotesNum = db.notesList.length;
+      });
     }
   }
 
@@ -81,118 +94,150 @@ class _DatabasePageState extends State<DatabasePage> {
     return Scaffold(
       backgroundColor: const Color(0xff29283A),
       appBar: const MyAppBar(text: "Database"),
-      body: Column(
-        children: [
-          const SizedBox(height: 10),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                color: const Color(0xff323130),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(width: 0.5, color: Colors.white)),
-            child: Center(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      const Text(
-                        "Notes in Local Database",
-                        style: TextStyle(color: Colors.white, fontSize: 15),
-                      ),
-                      Container(
-                        height: 50,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 30, vertical: 5),
-                        decoration: BoxDecoration(
-                            color: const Color(0xff855ef7),
-                            borderRadius: BorderRadius.circular(23)),
-                        child: Center(
-                          child: Text(
-                            localNotesNum.toString(),
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 15),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Divider(
-                    indent: 45,
-                    endIndent: 45,
-                    color: Colors.grey.shade700,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      const Text(
-                        "Notes in Cloud Database",
-                        style: TextStyle(color: Colors.white, fontSize: 15),
-                      ),
-                      Container(
-                        height: 50,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 30, vertical: 5),
-                        decoration: BoxDecoration(
-                            color: const Color(0xff855ef7),
-                            borderRadius: BorderRadius.circular(23)),
-                        child: Center(
-                          child: Text(
-                            cloudNotesNum,
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 15),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () => _showPopUp(
-              txt: "Count how many notes are stored in the cloud database.",
-              func: _getDBCloudNum,
-            ),
-            child: Container(
-              margin: const EdgeInsets.all(9.0),
-              height: 45,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(height: 10),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                  color: const Color(0xff5F5EF7),
-                  borderRadius: BorderRadius.circular(18)),
-              child: const Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  color: const Color(0xff323130),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(width: 0.5, color: Colors.white)),
+              child: Center(
+                child: Column(
                   children: [
-                    Text(
-                      "Reload Data",
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        const Text(
+                          "Notes in Local Database",
+                          style: TextStyle(color: Colors.white, fontSize: 15),
+                        ),
+                        Container(
+                          height: 50,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 30, vertical: 5),
+                          decoration: BoxDecoration(
+                              color: const Color(0xff855ef7),
+                              borderRadius: BorderRadius.circular(23)),
+                          child: Center(
+                            child: Text(
+                              localNotesNum.toString(),
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 15),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    Icon(
-                      Icons.refresh,
-                      color: Colors.white,
-                    )
+                    Divider(
+                      indent: 45,
+                      endIndent: 45,
+                      color: Colors.grey.shade700,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        const Text(
+                          "Notes Aval. in Cloud DB",
+                          style: TextStyle(color: Colors.white, fontSize: 15),
+                        ),
+                        Container(
+                          height: 50,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 30, vertical: 5),
+                          decoration: BoxDecoration(
+                              color: const Color(0xff855ef7),
+                              borderRadius: BorderRadius.circular(23)),
+                          child: Center(
+                            child: Text(
+                              cloudNotes,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 15),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    Divider(
+                      indent: 45,
+                      endIndent: 45,
+                      color: Colors.grey.shade700,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "Last Time Backup",
+                          style: TextStyle(color: Colors.white, fontSize: 15),
+                        ),
+                        const SizedBox(width: 10),
+                        Container(
+                          height: 50,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 5),
+                          decoration: BoxDecoration(
+                              color: const Color(0xff855ef7),
+                              borderRadius: BorderRadius.circular(23)),
+                          child: Center(
+                            child: Text(
+                              synctime,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 15),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ],
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            child: Text(
-              "This will provide you details about the notes that are stored in both your app's local storage and the cloud database. Tap on the reload button to refresh the data.",
-              style: TextStyle(
-                color: Colors.grey.shade200,
-                fontSize: 13,
+            GestureDetector(
+              onTap: () => _showPopUp(
+                txt: "Count how many notes are stored in the cloud database.",
+                func: _getData,
+              ),
+              child: Container(
+                margin: const EdgeInsets.all(9.0),
+                height: 45,
+                decoration: BoxDecoration(
+                    color: const Color(0xff5F5EF7),
+                    borderRadius: BorderRadius.circular(18)),
+                child: const Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Reload Data",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      Icon(
+                        Icons.refresh,
+                        color: Colors.white,
+                      )
+                    ],
+                  ),
+                ),
               ),
             ),
-          )
-        ],
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              child: Text(
+                "This will provide you details about the notes that are stored in both your app's local storage and the cloud database. Tap on the reload button to refresh the data.",
+                style: TextStyle(
+                  color: Colors.grey.shade200,
+                  fontSize: 13,
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

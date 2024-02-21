@@ -13,8 +13,8 @@ class Intro2 extends StatelessWidget {
           SizedBox(
             height: 500,
             child: Padding(
-              padding: const EdgeInsets.all(1.0),
-              child: Image.asset("assets/image_2.png"),
+              padding: const EdgeInsets.all(20.0),
+              child: Image.asset("assets/intro2.png"),
             ),
           ),
         ],

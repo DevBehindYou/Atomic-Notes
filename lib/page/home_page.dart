@@ -21,6 +21,7 @@ class _HomePageState extends State<HomePage> {
   final NotesDataBase db = NotesDataBase();
   final TextEditingController _notesController = TextEditingController();
   final TextEditingController _titleController = TextEditingController();
+  late String createdAt;
   final ScrollController _controller = ScrollController();
   bool _isLoading = false;
   bool _mounted = true;
@@ -129,6 +130,7 @@ class _HomePageState extends State<HomePage> {
   void _goToCreateNote() {
     _titleController.clear();
     _notesController.clear();
+    createdAt = "Processing...";
     _showNotesCreaterPage(onSave: _saveNewNote);
   }
 
@@ -146,7 +148,7 @@ class _HomePageState extends State<HomePage> {
   void _editFunction(BuildContext context, int index) {
     _titleController.text = db.notesList[index][0].toString();
     _notesController.text = db.notesList[index][1].toString();
-
+    createdAt = db.notesList[index][2].toString();
     _showNotesCreaterPage(onSave: () => _editNote(context, index));
   }
 
@@ -173,6 +175,7 @@ class _HomePageState extends State<HomePage> {
         return NotesCreaterPage(
           tittleContoller: _titleController,
           notesController: _notesController,
+          createdAt: createdAt,
           onCopy: () => _copy(),
           onSave: () {
             onSave();

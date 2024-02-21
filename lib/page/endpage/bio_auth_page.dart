@@ -74,7 +74,7 @@ class _BiomPageState extends State<BiomPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xff29283A),
-      appBar: const MyAppBar(text: "Biometric Auth"),
+      appBar: const MyAppBar(text: "Security"),
       body: Column(
         children: [
           const SizedBox(height: 20),

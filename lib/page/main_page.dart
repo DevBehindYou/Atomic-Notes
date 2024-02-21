@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, use_super_parameters, unrelated_type_equality_checks, deprecated_member_use, curly_braces_in_flow_control_structures
 
 import 'dart:async';
-import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:atomic_notes/authentication/auth_services/auth_service.dart';
 import 'package:atomic_notes/database/database.dart';
@@ -11,7 +10,6 @@ import 'package:atomic_notes/page/settings_page.dart';
 import 'package:atomic_notes/utility/component/cloud_button.dart';
 import 'package:atomic_notes/utility/component/my_snackbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -32,6 +30,7 @@ class _MainPageState extends State<MainPage> {
   final _myBox = Hive.box('myBox');
   String? username = "@ensyncuser";
   bool _isLoading = false;
+  bool _isLoading2 = false;
   int currentIndex = 0;
 
   final List _pages = [
@@ -74,7 +73,7 @@ class _MainPageState extends State<MainPage> {
   // get the user name
   Future<void> _getUserName() async {
     setState(() {
-      _isLoading = true;
+      _isLoading2 = true;
     });
 
     try {
@@ -84,7 +83,7 @@ class _MainPageState extends State<MainPage> {
     } finally {
       Future.delayed(const Duration(microseconds: 1), () {
         setState(() {
-          _isLoading = false;
+          _isLoading2 = false;
         });
       });
     }
@@ -94,6 +93,7 @@ class _MainPageState extends State<MainPage> {
   void dispose() {
     _authStateChangesSubscription.cancel();
     _isLoading = false;
+    _isLoading2 = false;
     super.dispose();
   }
 
@@ -134,15 +134,6 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
-  Future<void> _exit() async {
-    const MySnackBar(
-      text: "exiting...",
-      sec: 900,
-    ).showMySnackBar(context);
-    await Future.delayed(const Duration(seconds: 1));
-    exit(0);
-  }
-
   void goToPage(index) {
     setState(() {
       currentIndex = index;
@@ -160,36 +151,26 @@ class _MainPageState extends State<MainPage> {
             _getUserName();
           },
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
             width: 200,
             decoration: BoxDecoration(
-                color: Colors.grey.shade800,
-                borderRadius: BorderRadius.circular(24),
-                boxShadow: [
-                  // bottom right shadow is darker
-                  BoxShadow(
-                    color: Colors.grey.shade900,
-                    offset: const Offset(2, 2),
-                    blurRadius: 2,
-                    spreadRadius: 1,
-                  ),
-                ]),
+              color: Colors.grey.shade800,
+              borderRadius: BorderRadius.circular(18),
+            ),
             child: Row(
               children: [
-                Container(
-                  height: 36,
-                  width: 36,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(17.5),
-                      border:
-                          Border.all(width: 0.7, color: Colors.grey.shade300)),
-                  child: const CircleAvatar(
-                    backgroundImage: AssetImage('assets/photo.png'),
-                  ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12.5),
+                  child: SizedBox(
+                      height: 36,
+                      width: 36,
+                      child: Image.asset(
+                        'assets/photo.png',
+                        fit: BoxFit.cover,
+                      )),
                 ),
                 const SizedBox(width: 7),
-                _isLoading
+                _isLoading2
                     ? Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -251,34 +232,7 @@ class _MainPageState extends State<MainPage> {
           )
         ],
 
-        leading: GestureDetector(
-          onTap: () {
-            const MySnackBar(
-              text: "DoubleTap to exit",
-              sec: 900,
-            ).showMySnackBar(context);
-          },
-          onDoubleTap: () {
-            _exit();
-          },
-          child: Center(
-            child: Container(
-              height: 40,
-              width: 40,
-              margin: const EdgeInsets.all(9.0),
-              padding: const EdgeInsets.all(6.0),
-              decoration: BoxDecoration(
-                color: const Color(0xff855ef7),
-                borderRadius: BorderRadius.circular(11),
-              ),
-              child: SvgPicture.asset(
-                'assets/back_arrow.svg',
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ),
-        backgroundColor: const Color(0xff323130),
+        backgroundColor: const Color(0xff29283A),
         elevation: 0,
       ),
       // pages to show in body
@@ -286,13 +240,13 @@ class _MainPageState extends State<MainPage> {
 
       // bottom Navigation bar section
       bottomNavigationBar: Container(
-        color: const Color(0xff232427),
+        color: const Color(0xff29283A),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
           child: GNav(
             mainAxisAlignment: MainAxisAlignment.center,
             onTabChange: (index) => goToPage(index),
-            backgroundColor: const Color(0xff232427),
+            backgroundColor: const Color(0xff29283A),
             color: Colors.white,
             activeColor: const Color(0xff5F5EF7),
             tabBackgroundColor: const Color(0xff121212),
@@ -309,7 +263,7 @@ class _MainPageState extends State<MainPage> {
               ),
               GButton(
                 icon: Icons.miscellaneous_services_rounded,
-                text: 'Misc',
+                text: 'Settings',
                 textStyle: TextStyle(
                     color: Colors.white,
                     letterSpacing: 1.0,

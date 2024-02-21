@@ -17,7 +17,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: const Color(0xff323130),
+      backgroundColor: const Color(0xff29283A),
       centerTitle: true,
       title: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 7),

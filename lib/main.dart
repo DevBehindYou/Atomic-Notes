@@ -9,9 +9,9 @@ import 'package:atomic_notes/page/endpage/about_us_page.dart';
 import 'package:atomic_notes/page/endpage/bio_auth_page.dart';
 import 'package:atomic_notes/page/endpage/cloud_sync_page.dart';
 import 'package:atomic_notes/page/endpage/dev_page.dart';
+import 'package:atomic_notes/page/endpage/edit_profile_page.dart';
 import 'package:atomic_notes/page/endpage/t_and_c_page.dart';
 import 'package:atomic_notes/page/home_page.dart';
-import 'package:atomic_notes/page/loading_screen.dart';
 import 'package:atomic_notes/page/endpage/lock_screen.dart';
 import 'package:atomic_notes/page/main_page.dart';
 import 'package:atomic_notes/page/endpage/notes_database_page.dart';
@@ -19,12 +19,10 @@ import 'package:atomic_notes/page/settings_page.dart';
 import 'package:atomic_notes/page/splash_screen.dart';
 import 'package:atomic_notes/utility/intropages/onboarding_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
-  await dotenv.load();
   final CredService cred = CredService();
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -61,7 +59,6 @@ class MyApp extends StatelessWidget {
         '/mainpage': (context) => const MainPage(),
         '/settingspage': (context) => const SettingsPage(),
         '/resetpage': (context) => const ResetPassword(),
-        '/loadingscreen': (context) => const LoadingScreen(),
         '/onboardingscreen': (context) => const OnBoardingScreen(),
         '/appinfo': (context) => const AppInfo(),
         '/lockscreen': (context) => const LockScreen(),
@@ -70,6 +67,7 @@ class MyApp extends StatelessWidget {
         '/cloudsyncpage': (context) => const CloudSyncPage(),
         '/biompage': (context) => const BiomPage(),
         '/tcpage': (context) => const TCPage(),
+        '/editprofilepage': (context) => const EditProfilePage(),
       },
     );
   }

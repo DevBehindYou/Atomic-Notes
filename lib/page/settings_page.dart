@@ -6,7 +6,6 @@ import 'package:atomic_notes/database/database.dart';
 import 'package:atomic_notes/utility/component/logo_container.dart';
 import 'package:atomic_notes/utility/component/logout_dialogbox.dart';
 import 'package:atomic_notes/utility/component/my_snackbar.dart';
-import 'package:atomic_notes/utility/component/my_textfield.dart';
 import 'package:atomic_notes/utility/component/profile_container.dart';
 import 'package:atomic_notes/utility/component/settings_tiles.dart';
 import 'package:flutter/material.dart';
@@ -26,76 +25,13 @@ class _SettingsPageState extends State<SettingsPage> {
   final NotesDataBase db = NotesDataBase();
   bool _isLoading = false;
   String? username = "@atomicuser";
-  final _usernameController = TextEditingController();
   bool _isMounted = true;
-  bool _isSwitch = false;
-
-  @override
-  void initState() {
-    _getUserName();
-    super.initState();
-  }
-
-  bool isFilled() {
-    if (_usernameController.text.trim() == "") {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  Future<void> _sendData() async {
-    if (!mounted) return;
-
-    final connectivityResult = await Connectivity().checkConnectivity();
-    setState(() {
-      _isLoading = true;
-      connectivityResult;
-    });
-    if (connectivityResult == ConnectivityResult.none) {
-      const MySnackBar(
-        text: "No Internet Connection!",
-        sec: 2000,
-      ).showMySnackBar(context);
-    } else {
-      if (isFilled()) {
-        String? response = await serve.updateUserInfo(
-            username: _usernameController.text.trim().toLowerCase());
-        MySnackBar(
-          text: response.toString(),
-          sec: 1000,
-        ).showMySnackBar(context);
-        setState(() {
-          _isLoading = false;
-        });
-        _getUserName();
-      } else {
-        const MySnackBar(
-          text: "Please enter you username",
-          sec: 2000,
-        ).showMySnackBar(context);
-      }
-    }
-
-    setState(() {
-      _isSwitch = false;
-      _isLoading = false;
-    });
-  }
 
   @override
   void dispose() {
     _isMounted = false;
     _isLoading = false;
-    _isSwitch = false;
-    _usernameController.dispose();
     super.dispose();
-  }
-
-  void _toggelSwitch() {
-    setState(() {
-      _isSwitch = !_isSwitch;
-    });
   }
 
   _showPopUp({required String txt, required Function func}) {
@@ -109,20 +45,6 @@ class _SettingsPageState extends State<SettingsPage> {
         );
       },
     );
-  }
-
-  // get the user name
-  Future<void> _getUserName() async {
-    if (!_isMounted) return;
-
-    try {
-      username = await serve.getUserInfo();
-      setState(() {
-        username;
-      });
-    } catch (e) {
-      // error
-    }
   }
 
   //logout function
@@ -162,18 +84,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 color: const Color(0xff3f3e3c),
                 borderRadius: BorderRadius.circular(25),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const Text(
-                    "Logged in as",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  Text(
-                    userId!,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ],
+              child: Text(
+                userId!,
+                style: const TextStyle(color: Colors.white),
               ),
             ),
             const SizedBox(height: 10),
@@ -186,67 +99,16 @@ class _SettingsPageState extends State<SettingsPage> {
                       "Are you sure you want to log out? Before you log out, make sure to backup or sync your notes data to the cloud by tapping on cloud sync button",
                   func: _logOut),
             ),
-            const SizedBox(height: 10),
-
-            SizedBox(
-              height: 70,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    height: 55,
-                    width: 250,
-                    decoration: BoxDecoration(
-                        color: const Color(0xff3f3e3c),
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Center(
-                      child: _isSwitch
-                          ? MyTextField(
-                              ico: const Icon(Icons.person),
-                              hintText: "Enter user name",
-                              controller: _usernameController)
-                          : Text(
-                              "User Name: $username",
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 15),
-                            ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: _toggelSwitch,
-                    child: Container(
-                      height: 45,
-                      width: 45,
-                      decoration: BoxDecoration(
-                          color: const Color(0xff855ef7),
-                          borderRadius: BorderRadius.circular(23)),
-                      child: const Center(
-                          child: Icon(
-                        Icons.edit,
-                        color: Colors.white,
-                      )),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            const SizedBox(height: 10),
-            GestureDetector(
-              onTap: _sendData,
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                height: 50,
-                decoration: BoxDecoration(
-                    color: const Color(0xff5F5EF7),
-                    borderRadius: BorderRadius.circular(23)),
-                child: const Center(
-                    child: Text(
-                  "Update",
-                  style: TextStyle(color: Colors.white, fontSize: 18),
-                )),
-              ),
-            ),
             const SizedBox(height: 20),
+
+            // profile page section
+            SettingsTiles(
+              action: () {
+                Navigator.pushNamed(context, '/editprofilepage');
+              },
+              text: "Profile",
+            ),
+            const SizedBox(height: 10),
 
             // notes database section
             SettingsTiles(
@@ -282,9 +144,9 @@ class _SettingsPageState extends State<SettingsPage> {
               },
               text: "More Options",
             ),
+            const SizedBox(height: 40),
 
             //logo section
-            const SizedBox(height: 40),
             const LogoContainer(),
             const SizedBox(height: 40),
 
@@ -297,12 +159,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 style: TextStyle(color: Colors.white, fontSize: 13)),
 
             const SizedBox(height: 40),
-            // Divider(
-            //   height: 35,
-            //   indent: 45,
-            //   endIndent: 45,
-            //   color: Colors.grey.shade700,
-            // ),
 
             // app info section
             const Text("About Atomic",

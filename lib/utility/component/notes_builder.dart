@@ -53,7 +53,7 @@ class NotesBulder extends StatelessWidget {
                     borderRadius: BorderRadius.circular(14),
                     color: Colors.grey.shade200),
                 child: Text(
-                  "Tittle: $tittle",
+                  tittle,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: TextStyle(
