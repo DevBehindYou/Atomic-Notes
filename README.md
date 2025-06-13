@@ -7,7 +7,7 @@
 
 All you need is a simple yet effective note application. Atomic Notes is a robust and user-friendly note-taking application designed to prioritize security and convenience. With powerful encryption, cloud sync capabilities, and intuitive features, Atomic Notes ensures that your notes are protected and easily accessible wherever you go.
 
-## You Can now fork a repo
+## You Can now fork the repo
 
 #No Tracking
 #No Data Thefting
