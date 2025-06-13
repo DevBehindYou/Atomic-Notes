@@ -1,3 +1,8 @@
+
+![image](https://github.com/user-attachments/assets/3088b974-8672-4954-a4e2-51721b916f31)
+
+
+
 # Atomic Notes Project
 
 All you need is a simple yet effective note application. Atomic Notes is a robust and user-friendly note-taking application designed to prioritize security and convenience. With powerful encryption, cloud sync capabilities, and intuitive features, Atomic Notes ensures that your notes are protected and easily accessible wherever you go.
@@ -125,6 +130,12 @@ void main() {
   print('Encrypted message: ${base64.encode(encryptedMessage)}');
 }
 # Intro Images:
+> ![image](https://github.com/user-attachments/assets/9405e2b9-771b-4899-8e4d-110e73e81f82) ![image](https://github.com/user-attachments/assets/30515773-2c4e-4f3f-bc60-9fcd9b406d24) ![image](https://github.com/user-attachments/assets/130cddd6-affe-4419-bf47-98c605b0b4a7) ![image](https://github.com/user-attachments/assets/b4be4dcf-90df-4b2a-9e2f-22a03418f309) ![image](https://github.com/user-attachments/assets/6332f8e0-289b-47c6-9db7-ea33157589fc) ![image](https://github.com/user-attachments/assets/be0db0f0-d767-4103-aff4-f725e3d39c57)
+
+
+
+
+
 
 
 
